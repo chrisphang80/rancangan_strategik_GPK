@@ -82,16 +82,17 @@
     <div id="loginScreen" class="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 flex items-center justify-center p-4">
         <div class="bg-white/95 backdrop-blur-xl w-full max-w-md rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
             <div class="bg-gradient-to-r from-blue-900 to-indigo-900 p-6 text-center text-white relative">
-                <div class="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-md mx-auto mb-3 p-2 flex items-center justify-center border border-white/25 shadow-lg">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg" alt="Logo KPM" class="max-h-full max-w-full object-contain">
+                <div class="w-20 h-20 rounded-2xl bg-white/15 backdrop-blur-md mx-auto mb-3 p-2 flex items-center justify-center border border-white/25 shadow-lg overflow-hidden">
+                    <img id="loginLogoImg" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                 </div>
+                <p id="loginSchoolName" class="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider mb-0.5"></p>
                 <h1 class="font-extrabold text-lg tracking-wide">Sistem Pengurusan GPK KPM</h1>
                 <p class="text-xs text-blue-200 mt-1">Perancangan Strategik, OPPM & Pelan Operasi (Cloud)</p>
             </div>
 
             <form onsubmit="handleLogin(event)" class="p-6 space-y-4">
-                <div id="loginAlert" class="hidden p-3 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                <div id="loginAlert" class="hidden p-3 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 flex items-start gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-sm mt-0.5"></i>
                     <span id="loginAlertMsg">Ralat log masuk</span>
                 </div>
 
@@ -125,16 +126,25 @@
                     <span>Log Masuk ke Cloud KPM</span>
                 </button>
 
-                <!-- Optional Runtime Supabase Configuration -->
+                <!-- Runtime Supabase Configuration -->
                 <div class="pt-3 border-t border-slate-100">
                     <button type="button" onclick="document.getElementById('sbConfigBox').classList.toggle('hidden')" class="text-[11px] text-slate-400 hover:text-blue-600 font-semibold flex items-center gap-1 mx-auto">
                         <i class="fa-solid fa-database"></i> Tetapan Sambungan Supabase
                     </button>
                     <div id="sbConfigBox" class="hidden mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-[11px]">
-                        <p class="text-slate-500 font-medium">Isi jika belum ditetapkan dalam kod sumber HTML:</p>
-                        <input type="text" id="customSbUrl" placeholder="https://xxxx.supabase.co" class="w-full p-2 border rounded-lg bg-white font-mono">
-                        <input type="password" id="customSbKey" placeholder="Supabase Anon Public Key" class="w-full p-2 border rounded-lg bg-white font-mono">
-                        <button type="button" onclick="saveCustomSupabaseConfig()" class="w-full py-1.5 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700">Simpan Tetapan URL & Key</button>
+                        <p class="text-slate-600 font-semibold">Masukkan Project URL & Publishable/Anon Key:</p>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-0.5">Project URL (bermula dengan https://)</label>
+                            <input type="text" id="customSbUrl" placeholder="https://xxxxxxxxxxxx.supabase.co" class="w-full p-2 border rounded-lg bg-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-0.5">Publishable / Anon Public Key</label>
+                            <input type="text" id="customSbKey" placeholder="sb_publishable_... atau eyJ..." class="w-full p-2 border rounded-lg bg-white font-mono">
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="saveCustomSupabaseConfig()" class="flex-1 py-1.5 bg-slate-800 text-white rounded-lg font-bold hover:bg-slate-700">Simpan Tetapan</button>
+                            <button type="button" onclick="clearCustomSupabaseConfig()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg font-bold hover:bg-slate-300">Reset</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -147,8 +157,8 @@
         <header class="no-print bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white sticky top-0 z-40 shadow-xl border-b border-blue-500/20">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
-                    <div id="headerLogoContainer" class="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center p-1 border border-white/20 shadow-inner">
-                        <img id="headerLogoImg" src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg" alt="Logo KPM" class="max-h-full max-w-full object-contain">
+                    <div id="headerLogoContainer" class="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center p-1 border border-white/20 shadow-inner overflow-hidden">
+                        <img id="headerLogoImg" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
                     </div>
                     <div>
                         <h1 class="font-extrabold text-sm md:text-base leading-tight tracking-wide drop-shadow-sm flex flex-wrap items-center gap-2">
@@ -279,20 +289,24 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- UPLOAD LOGO -->
+                        <!-- UPLOAD LOGO (IMPROVED VISIBILITY & INSTANT SYNC) -->
                         <div class="bg-gradient-to-b from-blue-50/70 to-slate-50 rounded-2xl p-5 border border-blue-100 flex flex-col items-center justify-center text-center shadow-inner">
                             <div class="relative group mb-3">
-                                <div class="w-32 h-32 rounded-2xl bg-white border-2 border-blue-200 shadow-md flex items-center justify-center overflow-hidden p-2">
-                                    <img id="schoolLogoPreview" src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg" alt="Preview Logo" class="max-h-full max-w-full object-contain">
+                                <div onclick="document.getElementById('logoInput').click()" class="w-32 h-32 rounded-2xl bg-white border-2 border-blue-200 shadow-md flex items-center justify-center overflow-hidden p-2 cursor-pointer">
+                                    <img id="schoolLogoPreview" alt="Preview Logo Sekolah" class="max-h-full max-w-full object-contain">
                                 </div>
                                 <label for="logoInput" class="absolute inset-0 bg-blue-950/70 text-white rounded-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
                                     <i class="fa-solid fa-camera text-2xl mb-1 text-amber-400"></i>
-                                    <span class="text-xs font-bold">Muat Naik Logo</span>
+                                    <span class="text-xs font-bold">Tukar Logo</span>
                                 </label>
-                                <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                                <input type="file" id="logoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="hidden" onchange="handleLogoUpload(event)">
                             </div>
-                            <p class="text-xs font-bold text-slate-700 mb-1">Logo Sekolah (Dikongsi Semua Unit)</p>
-                            <button onclick="resetLogo()" class="text-[11px] text-rose-600 hover:text-rose-800 font-semibold underline">Reset Logo Default</button>
+
+                            <button type="button" onclick="document.getElementById('logoInput').click()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5 mb-1.5">
+                                <i class="fa-solid fa-image"></i> Pilih Gambar Logo
+                            </button>
+                            <p id="logoUploadStatus" class="text-[11px] font-bold text-slate-600 mb-1">Logo Sekolah (Dikongsi Semua Unit)</p>
+                            <button type="button" onclick="resetLogo()" class="text-[11px] text-rose-600 hover:text-rose-800 font-semibold underline">Reset Logo Default</button>
                         </div>
 
                         <!-- BUTIRAN SEKOLAH & PILIHAN PORTFOLIO GPK -->
@@ -640,20 +654,38 @@
     <!-- ==================== JAVASCRIPT SUPABASE & CORE LOGIC ==================== -->
     <script>
         // =========================================================================
-        // KONFIGURASI SUPABASE (SILA TUKAR URL & ANON KEY ANDA DI SINI)
+        // KONFIGURASI SUPABASE:
+        // 1. DEFAULT_SUPABASE_URL = Project URL (cth: "https://abcdefghijkl.supabase.co")
+        // 2. DEFAULT_SUPABASE_ANON_KEY = Publishable / Anon Public Key
         // =========================================================================
-        const DEFAULT_SUPABASE_URL = "https://coonfynierdixvcdlpij.supabase.co";
+        const DEFAULT_SUPABASE_URL = "https://您的项目ID.supabase.co";
         const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable_LImdRr4pSEwlWhes6bK9JA_bPhmm5aP";
+
+        // Logo lalai terbina dalam (SVG Data URI - tidak akan patah/broken walaupun offline)
+        const DEFAULT_LOGO_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                <defs>
+                    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1e3a8a"/>
+                        <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                </defs>
+                <path d="M60 8 L104 24 V58 C104 86 84 104 60 114 C36 104 16 86 16 58 V24 Z" fill="url(#g)" stroke="#f59e0b" stroke-width="4"/>
+                <path d="M60 16 L96 29 V57 C96 80 79 96 60 105 C41 96 24 80 24 57 V29 Z" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5"/>
+                <circle cx="60" cy="45" r="13" fill="#f59e0b"/>
+                <path d="M38 72 Q60 62 82 72 L78 84 Q60 75 42 84 Z" fill="#ffffff"/>
+                <text x="60" y="98" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#fbbf24" text-anchor="middle">KPM</text>
+            </svg>
+        `);
 
         let supabaseClient = null;
         let syncTimer = null;
 
-        // Sesi Pengguna Semasa
         let currentSession = {
             isAuthenticated: false,
-            roleKey: null,       // 'admin' | 'gpk1' | 'gpk_hem' | 'gpk_koku'
+            roleKey: null,
             roleName: "",
-            adminPass: ""        // Disimpan sementara dalam sesi jika log masuk sebagai admin
+            adminPass: ""
         };
 
         const PORTFOLIO_LABELS = {
@@ -662,11 +694,10 @@
             gpk_koku: "GPK Kokurikulum"
         };
 
-        // Struktur State Utama
         let state = {
             viewport: 'desktop',
             activePortfolioKey: 'gpk1',
-            logoBase64: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg',
+            logoBase64: DEFAULT_LOGO_SVG,
             profil: {
                 portfolio: "GPK 1 (Kurikulum & Pentadbiran)",
                 namaSekolah: "SMK SERI BINTANG UTAMA",
@@ -686,43 +717,126 @@
             operasi: {}
         };
 
+        // Helper untuk memaparkan logo di semua tempat (Login, Header, Profil)
+        function applyLogoToAllElements(logoSrc) {
+            const validSrc = (logoSrc && !logoSrc.includes('upload.wikimedia.org')) ? logoSrc : DEFAULT_LOGO_SVG;
+            state.logoBase64 = validSrc;
+
+            const loginImg = document.getElementById('loginLogoImg');
+            const headerImg = document.getElementById('headerLogoImg');
+            const previewImg = document.getElementById('schoolLogoPreview');
+
+            if (loginImg) loginImg.src = validSrc;
+            if (headerImg) headerImg.src = validSrc;
+            if (previewImg) previewImg.src = validSrc;
+
+            if (validSrc !== DEFAULT_LOGO_SVG) {
+                try { localStorage.setItem('gpk_cached_logo', validSrc); } catch (e) {}
+            }
+        }
+
         // -------------------------------------------------------------------------
         // 1. INISIALISASI SUPABASE & SESI
         // -------------------------------------------------------------------------
         function getSupabaseCredentials() {
-            const savedUrl = localStorage.getItem('gpk_sb_url');
-            const savedKey = localStorage.getItem('gpk_sb_key');
-            const url = (savedUrl && savedUrl.startsWith('http')) ? savedUrl : DEFAULT_SUPABASE_URL;
-            const key = (savedKey && savedKey.length > 20) ? savedKey : DEFAULT_SUPABASE_ANON_KEY;
+            const savedUrl = (localStorage.getItem('gpk_sb_url') || '').trim();
+            const savedKey = (localStorage.getItem('gpk_sb_key') || '').trim();
+            const url = savedUrl.startsWith('http') ? savedUrl : DEFAULT_SUPABASE_URL.trim();
+            const key = (savedKey.length > 20 && !savedKey.startsWith('sb_secret_')) ? savedKey : DEFAULT_SUPABASE_ANON_KEY.trim();
             return { url, key };
         }
 
         function initSupabaseClient() {
             const { url, key } = getSupabaseCredentials();
-            document.getElementById('customSbUrl').value = url.includes('YOUR_PROJECT_ID') ? '' : url;
-            document.getElementById('customSbKey').value = key.includes('YOUR_SUPABASE') ? '' : key;
+            document.getElementById('customSbUrl').value = (url.includes('YOUR_PROJECT_ID') || url.includes('您的项目ID')) ? '' : url;
+            document.getElementById('customSbKey').value = (key.includes('YOUR_SUPABASE') || key.startsWith('sb_secret_')) ? '' : key;
 
-            if (!url || url.includes('YOUR_PROJECT_ID') || !key || key.includes('YOUR_SUPABASE')) {
-                showLoginAlert("Sila tetapkan Supabase URL & Anon Key terlebih dahulu (klik Tetapan Sambungan Supabase di bawah).");
+            if (!url || !url.startsWith('https://') || url.includes('YOUR_PROJECT_ID') || url.includes('您的项目ID')) {
+                showLoginAlert("Sila isi Project URL Supabase yang sah (bermula dengan https://xxxx.supabase.co) di Tetapan Sambungan Supabase di bawah.");
                 document.getElementById('sbConfigBox').classList.remove('hidden');
                 return false;
             }
-            supabaseClient = window.supabase.createClient(url, key);
-            return true;
+            if (!key || key.length < 20 || key.includes('YOUR_SUPABASE')) {
+                showLoginAlert("Sila isi Publishable / Anon Public Key Supabase anda di Tetapan Sambungan Supabase di bawah.");
+                document.getElementById('sbConfigBox').classList.remove('hidden');
+                return false;
+            }
+            if (key.startsWith('sb_secret_')) {
+                showLoginAlert("Amaran Keselamatan: Anda menggunakan 'sb_secret_' key. Sila tukar kepada 'sb_publishable_...' atau 'anon public' key.");
+                document.getElementById('sbConfigBox').classList.remove('hidden');
+                return false;
+            }
+
+            try {
+                supabaseClient = window.supabase.createClient(url, key);
+                return true;
+            } catch (err) {
+                console.error("CreateClient error:", err);
+                showLoginAlert("Ralat konfigurasi Supabase: " + err.message);
+                document.getElementById('sbConfigBox').classList.remove('hidden');
+                return false;
+            }
+        }
+
+        // Muat logo & nama sekolah daripada Supabase untuk paparan halaman Log Masuk
+        async function loadLoginBrandingFromCloud() {
+            const cachedLogo = localStorage.getItem('gpk_cached_logo');
+            applyLogoToAllElements(cachedLogo || DEFAULT_LOGO_SVG);
+
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('gpk_strategic_plans')
+                    .select('plan_data')
+                    .eq('portfolio_key', 'shared_school')
+                    .maybeSingle();
+
+                if (!error && data && data.plan_data) {
+                    if (data.plan_data.logoBase64) {
+                        applyLogoToAllElements(data.plan_data.logoBase64);
+                    }
+                    if (data.plan_data.namaSekolah) {
+                        const schoolLabel = document.getElementById('loginSchoolName');
+                        if (schoolLabel) schoolLabel.innerText = data.plan_data.namaSekolah;
+                    }
+                }
+            } catch (e) {
+                console.warn("Skip login branding fetch:", e);
+            }
         }
 
         function saveCustomSupabaseConfig() {
             const url = document.getElementById('customSbUrl').value.trim();
             const key = document.getElementById('customSbKey').value.trim();
-            if (!url.startsWith('http') || key.length < 20) {
-                showLoginAlert("Format URL atau Anon Key Supabase tidak sah.");
+            if (!url.startsWith('https://')) {
+                showLoginAlert("Project URL mesti bermula dengan https:// (contoh: https://abcdefgh.supabase.co).");
+                return;
+            }
+            if (key.startsWith('sb_secret_')) {
+                showLoginAlert("JANGAN guna kunci sb_secret_ di pelayar! Sila salin kunci sb_publishable_ atau anon public.");
+                return;
+            }
+            if (key.length < 20) {
+                showLoginAlert("Publishable / Anon Key Supabase tidak sah.");
                 return;
             }
             localStorage.setItem('gpk_sb_url', url);
             localStorage.setItem('gpk_sb_key', key);
+            if (initSupabaseClient()) {
+                document.getElementById('loginAlert').classList.add('hidden');
+                document.getElementById('sbConfigBox').classList.add('hidden');
+                loadLoginBrandingFromCloud();
+                alert("Tetapan Supabase berjaya disimpan! Sila log masuk.");
+            }
+        }
+
+        function clearCustomSupabaseConfig() {
+            localStorage.removeItem('gpk_sb_url');
+            localStorage.removeItem('gpk_sb_key');
+            document.getElementById('customSbUrl').value = '';
+            document.getElementById('customSbKey').value = '';
+            supabaseClient = null;
             initSupabaseClient();
-            document.getElementById('loginAlert').classList.add('hidden');
-            alert("Tetapan Supabase berjaya disimpan! Sila log masuk.");
         }
 
         function togglePasswordVisibility(inputId, btn) {
@@ -780,7 +894,14 @@
                 }
             } catch (err) {
                 console.error("Login error:", err);
-                showLoginAlert("Ralat sambungan Supabase: " + (err.message || "Sila semak URL/Key & SQL RPC."));
+                const errMsg = err.message || "";
+                if (errMsg.includes("verify_gpk_login")) {
+                    showLoginAlert("Fungsi SQL 'verify_gpk_login' belum wujud di Supabase. Sila jalankan skrip SQL di SQL Editor Supabase terlebih dahulu.");
+                } else if (errMsg.includes("Failed to fetch")) {
+                    showLoginAlert("Gagal menghubungi pelayan Supabase. Sila semak Project URL anda (" + getSupabaseCredentials().url + ") dan sambungan internet.");
+                } else {
+                    showLoginAlert("Ralat sambungan Supabase: " + errMsg);
+                }
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>Log Masuk ke Cloud KPM</span>`;
@@ -797,14 +918,12 @@
             const roleBadge = document.getElementById('headerRoleBadge');
 
             if (currentSession.roleKey === 'admin') {
-                // Admin bebas pilih mana-mana unit & nampak tab kata laluan
                 portfolioSelect.disabled = false;
                 lockHint.innerHTML = `<i class="fa-solid fa-unlock"></i> Mod Admin: Boleh tukar semua unit`;
                 adminTab.classList.remove('hidden');
                 roleBadge.innerHTML = `<i class="fa-solid fa-crown text-amber-300 mr-1"></i>Admin / Pengetua`;
                 state.activePortfolioKey = 'gpk1';
             } else {
-                // GPK terkunci pada unit masing-masing sahaja
                 portfolioSelect.disabled = true;
                 lockHint.innerHTML = `<i class="fa-solid fa-lock"></i> Akses Terkunci pada Unit Anda`;
                 adminTab.classList.add('hidden');
@@ -822,6 +941,7 @@
             document.getElementById('loginPassword').value = "";
             document.getElementById('mainAppWrapper').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
+            applyLogoToAllElements(state.logoBase64);
             switchTab('profil');
         }
 
@@ -830,6 +950,7 @@
         // -------------------------------------------------------------------------
         function setSyncStatus(status, text) {
             const el = document.getElementById('cloudSyncStatus');
+            if (!el) return;
             if (status === 'saving') {
                 el.className = "text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 flex items-center gap-1";
                 el.innerHTML = `<i class="fa-solid fa-rotate fa-spin"></i> ${text || 'Menyimpan...'}`;
@@ -849,7 +970,6 @@
             state.profil.portfolio = PORTFOLIO_LABELS[portfolioKey];
 
             try {
-                // Muat kedua-dua rekod: profil sekolah dikongsi & data khusus unit GPK
                 const { data, error } = await supabaseClient
                     .from('gpk_strategic_plans')
                     .select('portfolio_key, plan_data')
@@ -860,10 +980,9 @@
                 const sharedRow = data.find(r => r.portfolio_key === 'shared_school');
                 const unitRow = data.find(r => r.portfolio_key === portfolioKey);
 
-                // 1. Terapkan maklumat sekolah dikongsi jika wujud
                 if (sharedRow && sharedRow.plan_data && Object.keys(sharedRow.plan_data).length > 0) {
                     const s = sharedRow.plan_data;
-                    state.logoBase64 = s.logoBase64 || state.logoBase64;
+                    applyLogoToAllElements(s.logoBase64 || DEFAULT_LOGO_SVG);
                     state.profil.namaSekolah = s.namaSekolah || state.profil.namaSekolah;
                     state.profil.kodSekolah = s.kodSekolah || state.profil.kodSekolah;
                     state.profil.tahunStrategik = s.tahunStrategik || state.profil.tahunStrategik;
@@ -871,9 +990,10 @@
                     state.profil.gpk1 = s.gpk1 || state.profil.gpk1;
                     state.profil.gpkHem = s.gpkHem || state.profil.gpkHem;
                     state.profil.gpkKoku = s.gpkKoku || state.profil.gpkKoku;
+                } else {
+                    applyLogoToAllElements(DEFAULT_LOGO_SVG);
                 }
 
-                // 2. Terapkan data unit khusus jika wujud; jika kosong, muat templat awal unit
                 if (unitRow && unitRow.plan_data && unitRow.plan_data.strategik) {
                     const u = unitRow.plan_data;
                     state.profil.setiausaha = u.setiausaha || "Puan Siti Aminah binti Kassim";
@@ -885,7 +1005,7 @@
                     state.operasi = u.operasi || {};
                 } else {
                     loadDefaultsForPortfolio(portfolioKey);
-                    await syncToSupabase(); // Simpan templat awal ke Supabase
+                    await syncToSupabase();
                 }
 
                 refreshAllUI();
@@ -898,7 +1018,7 @@
         }
 
         async function syncToSupabase() {
-            if (!supabaseClient || !currentSession.isAuthenticated) return;
+            if (!supabaseClient || !currentSession.isAuthenticated) return false;
             setSyncStatus('saving', 'Menyimpan ke Cloud...');
 
             const sharedPayload = {
@@ -943,9 +1063,11 @@
                 if (resUnit.error) throw resUnit.error;
 
                 setSyncStatus('saved');
+                return true;
             } catch (err) {
                 console.error("Sync error:", err);
                 setSyncStatus('error', 'Gagal simpan!');
+                return false;
             }
         }
 
@@ -954,7 +1076,7 @@
             syncToSupabase();
         }
 
-        function saveData() {
+        function saveData(immediate = false) {
             const pKey = document.getElementById('cfg-portfolio').value;
             state.activePortfolioKey = pKey;
             state.profil.portfolio = PORTFOLIO_LABELS[pKey];
@@ -976,16 +1098,115 @@
             renderStatCards();
             renderPrintDocument();
 
-            // Debounce simpan ke Supabase (1 saat selepas berhenti menaip)
-            setSyncStatus('saving', 'Menunggu simpan...');
             clearTimeout(syncTimer);
-            syncTimer = setTimeout(() => {
-                syncToSupabase();
-            }, 1000);
+            if (immediate) {
+                return syncToSupabase();
+            } else {
+                setSyncStatus('saving', 'Menunggu simpan...');
+                syncTimer = setTimeout(() => {
+                    syncToSupabase();
+                }, 1000);
+            }
         }
 
         // -------------------------------------------------------------------------
-        // 4. PENGURUSAN KATA LALUAN OLEH ADMIN
+        // 4. MUAT NAIK LOGO SEKOLAH (DIPERBAIKI SEPENUHNYA)
+        // -------------------------------------------------------------------------
+        function handleLogoUpload(event) {
+            const input = event.target;
+            const file = input.files && input.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('logoUploadStatus');
+            if (statusEl) {
+                statusEl.className = "text-[11px] font-bold text-blue-600 mb-1";
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memproses gambar logo...`;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rawDataUrl = e.target.result;
+                const img = new Image();
+
+                img.onload = async function() {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const maxDim = 260;
+                        let w = img.width || 200;
+                        let h = img.height || 200;
+
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round(h * maxDim / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round(w * maxDim / h);
+                                h = maxDim;
+                            }
+                        }
+
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+
+                        const compressedDataUrl = canvas.toDataURL('image/png', 0.85);
+                        applyLogoToAllElements(compressedDataUrl);
+                        const ok = await saveData(true); // Simpan serta-merta ke Supabase!
+
+                        if (statusEl) {
+                            statusEl.className = ok
+                                ? "text-[11px] font-bold text-emerald-700 mb-1"
+                                : "text-[11px] font-bold text-amber-700 mb-1";
+                            statusEl.innerHTML = ok
+                                ? `<i class="fa-solid fa-circle-check"></i> Logo berjaya dikemas kini & disimpan!`
+                                : `<i class="fa-solid fa-triangle-exclamation"></i> Logo dipaparkan (semak sambungan Cloud).`;
+                        }
+                    } catch (err) {
+                        console.error("Canvas logo error:", err);
+                        applyLogoToAllElements(rawDataUrl);
+                        await saveData(true);
+                    } finally {
+                        input.value = ""; // Reset supaya fail sama boleh dipilih semula
+                    }
+                };
+
+                img.onerror = async function() {
+                    // Fallback terus guna rawDataUrl jika format SVG/khas
+                    applyLogoToAllElements(rawDataUrl);
+                    await saveData(true);
+                    if (statusEl) {
+                        statusEl.className = "text-[11px] font-bold text-emerald-700 mb-1";
+                        statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Logo berjaya dikemas kini!`;
+                    }
+                    input.value = "";
+                };
+
+                img.src = rawDataUrl;
+            };
+
+            reader.onerror = function() {
+                alert("Gagal membaca fail gambar. Sila pilih fail PNG atau JPG yang lain.");
+                input.value = "";
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        async function resetLogo() {
+            localStorage.removeItem('gpk_cached_logo');
+            applyLogoToAllElements(DEFAULT_LOGO_SVG);
+            const statusEl = document.getElementById('logoUploadStatus');
+            if (statusEl) {
+                statusEl.className = "text-[11px] font-bold text-slate-600 mb-1";
+                statusEl.innerText = "Logo ditetapkan semula ke lalai KPM.";
+            }
+            await saveData(true);
+        }
+
+        // -------------------------------------------------------------------------
+        // 5. PENGURUSAN KATA LALUAN OLEH ADMIN
         // -------------------------------------------------------------------------
         async function changeRolePassword(targetRole) {
             const input = document.getElementById(`newPass-${targetRole}`);
@@ -1028,7 +1249,7 @@
         }
 
         // -------------------------------------------------------------------------
-        // 5. TEMPLAT & LOGIK TERAS PERANCANGAN STRATEGIK
+        // 6. TEMPLAT & LOGIK TERAS PERANCANGAN STRATEGIK
         // -------------------------------------------------------------------------
         function loadDefaultsForPortfolio(pKey) {
             state.activePortfolioKey = pKey;
@@ -1160,47 +1381,7 @@
             document.getElementById('swot-o').value = state.swot.o;
             document.getElementById('swot-c').value = state.swot.c;
 
-            if (state.logoBase64) {
-                document.getElementById('schoolLogoPreview').src = state.logoBase64;
-                document.getElementById('headerLogoImg').src = state.logoBase64;
-            }
-        }
-
-        // Muat naik & mampatkan logo supaya ringan di Supabase JSONB
-        function handleLogoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 260;
-                    let w = img.width, h = img.height;
-                    if (w > maxDim || h > maxDim) {
-                        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-                        else { w = Math.round(w * maxDim / h); h = maxDim; }
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    state.logoBase64 = canvas.toDataURL('image/png', 0.85);
-                    document.getElementById('schoolLogoPreview').src = state.logoBase64;
-                    document.getElementById('headerLogoImg').src = state.logoBase64;
-                    saveData();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetLogo() {
-            const defaultLogo = 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg';
-            state.logoBase64 = defaultLogo;
-            document.getElementById('schoolLogoPreview').src = defaultLogo;
-            document.getElementById('headerLogoImg').src = defaultLogo;
-            saveData();
+            applyLogoToAllElements(state.logoBase64);
         }
 
         function setViewportMode(mode) {
@@ -1251,7 +1432,7 @@
             }
             loadDefaultsForPortfolio(state.activePortfolioKey);
             refreshAllUI();
-            saveData();
+            saveData(true);
         }
 
         function renderStrategikTable() {
@@ -1490,7 +1671,7 @@
 
         function renderPrintDocument() {
             const area = document.getElementById('a4-print-area');
-            const logo = state.logoBase64 || 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Coat_of_arms_of_Malaysia.svg';
+            const logo = (state.logoBase64 && !state.logoBase64.includes('upload.wikimedia.org')) ? state.logoBase64 : DEFAULT_LOGO_SVG;
 
             let activeGPKName = state.profil.gpk1;
             if (state.activePortfolioKey === "gpk_hem") activeGPKName = state.profil.gpkHem;
@@ -1700,7 +1881,6 @@
             fileReader.onload = function(e) {
                 try {
                     const imported = JSON.parse(e.target.result);
-                    // Kekalkan kunci portfolio semasa pengguna supaya GPK tidak tertukar unit secara tidak sengaja
                     const lockedKey = state.activePortfolioKey;
                     state = { ...state, ...imported, activePortfolioKey: lockedKey };
                     state.profil.portfolio = PORTFOLIO_LABELS[lockedKey];
@@ -1716,7 +1896,12 @@
 
         // Auto-init semasa halaman dimuatkan
         window.onload = async function() {
+            applyLogoToAllElements(localStorage.getItem('gpk_cached_logo') || DEFAULT_LOGO_SVG);
             const ready = initSupabaseClient();
+            if (ready) {
+                loadLoginBrandingFromCloud();
+            }
+
             const savedSession = sessionStorage.getItem('gpk_cloud_session');
             if (ready && savedSession) {
                 try {
